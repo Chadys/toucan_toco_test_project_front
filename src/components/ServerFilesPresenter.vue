@@ -23,9 +23,9 @@
                 </div>
             </div>
             <template v-if="dirProperties != null">
-                <p><strong>Properties for directory "{{ rootDir }}" at max level {{ maxLevel }}</strong></p>
+                <p><strong>Properties for directory "{{ dirProperties.name }}" at max level {{ maxLevel }}</strong></p>
 
-                <DirectoryPresenter :dirProperties="dirProperties"/>
+                <DirectoryPresenter :dirProperties="dirProperties.content"/>
             </template>
         </template>
     </div>
@@ -48,7 +48,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['loading', 'rootDir', 'maxLevel', 'dirProperties'])
+    ...mapState(['loading', 'maxLevel', 'dirProperties'])
   },
   methods: {
     selectNewDir() {
