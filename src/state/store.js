@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios';
 
 Vue.use(Vuex)
 
@@ -18,9 +19,20 @@ const store = new Vuex.Store({
         },
         async _updateProperties ({ commit, state }) {
             commit('_load');
-            // TODO replace mock with async call to webservice to get new dirProperties
-            await new Promise(resolve => setTimeout(resolve, state.maxLevel*1000));
-            commit('_setProperties', { dirProperties: null });
+            try {
+                const response = await axios.get(
+                    `${process.env.VUE_APP_API_BASE_URL}stat`,
+                    { params: {
+                        rootdir: state.rootDir,
+                        maxlevel: state.maxLevel
+                    }}
+                );
+                commit('_setProperties', { dirProperties: response.data });
+            } catch (error) {
+                console.error(error.toJSON());
+                commit('_setProperties', { dirProperties: null });
+                // TODO define global error handler to display them with snackbar or something
+            }
         }
     },
     mutations: {
